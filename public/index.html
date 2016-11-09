@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="stylesheets/style.css">
   </head>
 
-  <body>
+ <body>
     <ul id="msgs"></ul>
     <form>
       <input id="m" /><button>Send</button>
     </form>
+    <input id="n" /><button id="nick_btn">닉네임 변경</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script>
@@ -28,10 +29,15 @@ $(document).ready(function() {
   });
 
   socket.on('P', function(msg) {
-    $('#msgs').append($('<li>').text(msg));
+    $('#msgs').append($('<li>').text('<' + msg.nick + '> ' + msg.text));
+  });
+
+  $('#nick_btn').click(function() {
+    socket.emit('N', $('#n').val());
   });
 });
 
 </script>
   </body>
+  
 </html>

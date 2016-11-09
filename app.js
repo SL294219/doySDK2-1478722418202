@@ -21,19 +21,20 @@ app.use(express.static(__dirname + '/public'));
 //http와 socket.io를 사용 
 var http = require ('http').Server(app);
 var io = require('socket.io')(http);
-io.on ('connection', function(socket){
-	console.log('Client connected');
-	socket.on('P', function(msg) {
-		console.log('P', function(msg) {
-			console.log('P:'+msg);
-			io.emit('P',msg);
-		}
-		);
-	}
-	);
-}
 
-);
+io.on('connection', function(socket) {
+  console.log('Client connected');
+  socket.on('P', function(msg) {
+    console.log('P: ' + {'nick': socket.nick, 'text': msg});
+    io.emit('P', {'nick': socket.nick, 'text': msg});
+  });
+  socket.on('N', function(newnick) {
+    io.emit('P', {'nick':  socket.nick, 'text': '-> <' + newnick + '>'});
+    socket.nick = newnick;
+  });
+  socket.nick = 'User' + Math.floor(Math.random() * 1000);
+});
+
 
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
