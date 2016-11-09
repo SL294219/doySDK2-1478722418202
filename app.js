@@ -18,6 +18,23 @@ var app = express();
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 
+//http와 socket.io를 사용 
+var http = require ('http').Server(app);
+var io = require('socket.io')(http);
+io.on ('connection', function(socket){
+	console.log('Client connected');
+	socket.on('P', function(msg) {
+		console.log('P', function(msg) {
+			console.log('P:'+msg);
+			io.emit('P',msg);
+		}
+		);
+	}
+	);
+}
+
+);
+
 // get the app environment from Cloud Foundry
 var appEnv = cfenv.getAppEnv();
 
